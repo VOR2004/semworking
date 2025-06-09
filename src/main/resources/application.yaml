@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  application:
+    name: semworkapp
+  datasource:
+    url: jdbc:postgresql://localhost:5432/avito_db
+    username: postgres
+    password: djh1987
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  freemarker:
+    suffix: .ftl
+    template-loader-path: classpath:/templates/
+    settings:
+      default_encoding: UTF-8
+      number_format: 0.##
+dadata:
+  token: 1810621a5e094e972d607c0743830623510f49db
+yandex:
+  key: YCAJEUupwIcr0IOcDbqJkGpl2
+  s-key: YCPD-c2-3ahXEGPX04eT56yL2tuIjP7EvA--oRYO
+  bucket: bucketsemesterwork
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
