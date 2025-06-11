@@ -38,14 +38,23 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         ChatEntity chat = chatService.getChatIfUserHasAccess(msg.getChatId(), sender);
 
         chatService.sendMessage(chat, sender, msg.getContent());
-        List<WebSocketSession> sessions = chatSessions.getOrDefault(msg.getChatId(), Collections.emptyList());
 
+        String avatarUrl = null;
+        if (sender.getId().equals(chat.getSeller().getId())) {
+            avatarUrl = chat.getSeller().getProfile() != null ? chat.getSeller().getProfile().getAvatarUrl() : null;
+        } else if (sender.getId().equals(chat.getBuyer().getId())) {
+            avatarUrl = chat.getBuyer().getProfile() != null ? chat.getBuyer().getProfile().getAvatarUrl() : null;
+        }
+        msg.setAvatarUrl(avatarUrl != null ? avatarUrl : "/images/avatar-placeholder.png");
+
+        List<WebSocketSession> sessions = chatSessions.getOrDefault(msg.getChatId(), Collections.emptyList());
         for (WebSocketSession s : sessions) {
             if (s.isOpen()) {
                 s.sendMessage(new TextMessage(objectMapper.writeValueAsString(msg)));
             }
         }
     }
+
 
     private UUID getChatId(WebSocketSession session) {
         String query = session.getUri().getQuery();

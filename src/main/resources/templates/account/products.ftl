@@ -36,6 +36,7 @@
 </#if>
 
 <form method="post" action="/account/update/avatar" enctype="multipart/form-data">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <label>Аватар:
         <input type="file" name="avatarFile" accept="image/*" required>
     </label>
@@ -43,6 +44,7 @@
 </form>
 
 <form method="post" action="/account/update/phoneNumber">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <label>Телефон:
         <input type="text" name="phoneNumber" value="${userProfile.phoneNumber!}">
     </label>
@@ -50,6 +52,7 @@
 </form>
 
 <form method="post" action="/account/update/bio">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <label>О себе:
         <textarea name="bio">${userProfile.bio!}</textarea>
     </label>

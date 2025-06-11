@@ -13,4 +13,5 @@ public class ChatMessage {
     private String senderName;
     private String content;
     private String senderAvatar;
+    private String avatarUrl;
 }

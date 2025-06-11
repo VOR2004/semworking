@@ -1,5 +1,6 @@
 <#macro searchform>
     <form method="get" action="/" id="search-form" autocomplete="off">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <label>
             <input type="text" name="q" placeholder="Поиск по товарам..." value="${q!}" style="width: 250px;">
         </label>
@@ -26,6 +27,7 @@
 
 <#macro productform>
     <form id="product-form" autocomplete="off" enctype="multipart/form-data" novalidate>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <label>Название:
             <input type="text" name="title" value="${form.title!}">
             <div id="titleError" class="error"></div>

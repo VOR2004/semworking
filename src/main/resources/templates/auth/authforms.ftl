@@ -1,5 +1,6 @@
 <#macro loginForm>
     <form id="ajaxLoginForm">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <div id="errorMessage" style="color: red; margin-bottom: 10px; display: none;"></div>
         <div class="form-element">
             <label for="username">Email:</label>
@@ -18,6 +19,7 @@
 
 <#macro registerForm>
     <form id="registrationForm">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <div id="errorMessage" style="color: red; margin-bottom: 10px; display: none;"></div>
         <div class="form-element">
             <label for="username">Имя пользователя:</label>

@@ -8,7 +8,10 @@ const buyerAvatar = window.chatData.buyerAvatar;
 
 const socket = new WebSocket("ws://" + location.host + "/ws/chat?chatId=" + chatId);
 
-function getAvatarUrl(senderId) {
+function getAvatarUrl(senderId, avatarUrl) {
+    if (avatarUrl && avatarUrl.trim() !== "") {
+        return avatarUrl;
+    }
     if (senderId === sellerId) {
         return sellerAvatar && sellerAvatar.trim() !== "" ? sellerAvatar : "/images/avatar-placeholder.png";
     } else if (senderId === buyerId) {
@@ -32,7 +35,7 @@ socket.onmessage = function(event) {
     avatarImg.style.borderRadius = "50%";
     avatarImg.style.marginRight = "10px";
 
-    avatarImg.src = getAvatarUrl(msg.senderId);
+    avatarImg.src = getAvatarUrl(msg.senderId, msg.avatarUrl);
 
     const el = document.createElement("div");
     el.textContent = msg.senderName + ": " + msg.content;

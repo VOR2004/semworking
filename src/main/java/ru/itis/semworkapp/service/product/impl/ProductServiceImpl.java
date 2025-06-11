@@ -231,4 +231,16 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByTagName(tagName).stream().map(productMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean deleteProductById(String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            if (productRepository.existsById(uuid)) {
+                productRepository.deleteById(uuid);
+                return true;
+            }
+        } catch (IllegalArgumentException ignored) {}
+        return false;
+    }
 }

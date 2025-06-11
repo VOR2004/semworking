@@ -6,12 +6,12 @@ document.getElementById('ajaxLoginForm').addEventListener('submit', function(eve
     errorDiv.textContent = '';
 
     const formData = new FormData(this);
-    fetch('/login', {  // изменено на единый URL /login
+    fetch('/login', {
         method: 'POST',
         body: new URLSearchParams(formData),
         headers: {
             'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'  // добавлен заголовок для AJAX
+            'X-Requested-With': 'XMLHttpRequest'
         }
     }).then(response => {
         if (response.ok) {

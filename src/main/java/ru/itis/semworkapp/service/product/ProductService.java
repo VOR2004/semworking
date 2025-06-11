@@ -41,4 +41,5 @@ public interface ProductService {
 
     boolean userOwnsProduct(UserEntity user, ProductEntity product);
     List<ProductDto> findByTag(String tagName);
+    public boolean deleteProductById(String id);
 }

@@ -10,23 +10,6 @@ import ru.itis.semworkapp.exceptions.*;
 @Slf4j
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(PasswordMismatchException.class)
-//    public String handlePasswordMismatch(PasswordMismatchException ex, Model model) {
-//        model.addAttribute("formError", ex.getMessage());
-//        return "auth/register";
-//    }
-//
-//    @ExceptionHandler(EmailAlreadyExistsException.class)
-//    public String handleEmailExists(EmailAlreadyExistsException ex, Model model) {
-//        model.addAttribute("formError", ex.getMessage());
-//        return "auth/register";
-//    }
-//
-//    @ExceptionHandler(UserNotFoundException.class)
-//    public String handleUserNotFound(UserNotFoundException ex) {
-//        return "redirect:/login";
-//    }
-
     @ExceptionHandler(ChatNotFoundException.class)
     public String handleChatNotFound(ChatNotFoundException ex, Model model) {
         model.addAttribute("error", ex.getMessage());

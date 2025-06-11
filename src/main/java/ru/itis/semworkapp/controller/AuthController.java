@@ -2,6 +2,7 @@ package ru.itis.semworkapp.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
@@ -46,10 +48,12 @@ public class AuthController {
         } catch (EmailAlreadyExistsException e) {
             Map<String, String> errors = new HashMap<>();
             errors.put("email", e.getMessage());
+            log.warn("Registration failed: email {} already exists", form.getEmail());
             return ResponseEntity.badRequest().body(errors);
         } catch (PasswordMismatchException e) {
             Map<String, String> errors = new HashMap<>();
             errors.put("confirmPassword", e.getMessage());
+            log.warn("Registration failed: password mismatch for email {}", form.getEmail());
             return ResponseEntity.badRequest().body(errors);
         }
     }

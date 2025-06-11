@@ -47,6 +47,7 @@
 
 <div class="rating-container">
     <form method="post" action="/products/vote">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="hidden" name="productId" value="${product.id}">
         <input type="hidden" name="voteValue" value="-1">
         <button type="submit" class="vote-btn"
@@ -56,6 +57,7 @@
     <span class="rating-value">${product.rating}</span>
 
     <form method="post" action="/products/vote">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="hidden" name="productId" value="${product.id}">
         <input type="hidden" name="voteValue" value="1">
         <button type="submit" class="vote-btn"

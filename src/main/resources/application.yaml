@@ -33,6 +33,14 @@ yandex:
   key: YCAJEUupwIcr0IOcDbqJkGpl2
   s-key: YCPD-c2-3ahXEGPX04eT56yL2tuIjP7EvA--oRYO
   bucket: bucketsemesterwork
+jwt:
+  secret: "s3cr3tK3yThatIsAtLeast32CharactersLong!"
+  expiration-ms: 3600000
+
+logging:
+  level:
+    ru.itis.semworkapp: INFO
+    org.springframework.web: DEBUG
 
 springdoc:
   api-docs:

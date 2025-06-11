@@ -1,6 +1,7 @@
 package ru.itis.semworkapp.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import ru.itis.semworkapp.service.user.impl.UserProfileServiceImpl;
 
 import java.io.IOException;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AccountController {
@@ -51,6 +53,7 @@ public class AccountController {
         String avatarUrl = imageStorageService.uploadFile(avatarFile);
         userProfileService.updateAvatarUrl(user.getId(), avatarUrl);
         redirectAttributes.addFlashAttribute("message", "Аватар обновлен");
+        log.info("Avatar updated for user {}", user.getId());
         return "redirect:/account";
     }
 
@@ -63,6 +66,7 @@ public class AccountController {
         UserEntity user = userService.requireUserByEmail(userDetails.getUsername());
         userProfileService.updatePhoneNumber(user.getId(), phoneNumber);
         redirectAttributes.addFlashAttribute("message", "Телефон обновлен");
+        log.info("Number updated for user {}", user.getId());
         return "redirect:/account";
     }
 
@@ -75,6 +79,7 @@ public class AccountController {
         UserEntity user = userService.requireUserByEmail(userDetails.getUsername());
         userProfileService.updateBio(user.getId(), bio);
         redirectAttributes.addFlashAttribute("message", "Информация о себе обновлена");
+        log.info("Info updated for user {}", user.getId());
         return "redirect:/account";
     }
 }

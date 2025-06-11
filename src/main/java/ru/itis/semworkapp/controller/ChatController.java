@@ -1,6 +1,7 @@
 package ru.itis.semworkapp.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import ru.itis.semworkapp.service.user.UserService;
 
 import java.util.UUID;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
@@ -32,6 +34,7 @@ public class ChatController {
         UserEntity seller = userService.requireUserById(sellerId);
 
         ChatEntity chat = chatService.getOrCreateChat(seller, buyer);
+        log.info("User started a chat");
         return "redirect:/chat/" + chat.getId();
     }
 

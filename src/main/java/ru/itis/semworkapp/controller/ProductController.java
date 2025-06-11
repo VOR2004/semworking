@@ -2,6 +2,7 @@ package ru.itis.semworkapp.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ import ru.itis.semworkapp.service.user.UserService;
 import java.io.IOException;
 import java.util.*;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ProductController {
@@ -97,8 +99,10 @@ public class ProductController {
             productService.saveProduct(form, user);
             return ResponseEntity.ok().body(Collections.singletonMap("success", true));
         } catch (TooManyTagsException e) {
+            log.warn("Too many tags in input");
             return ResponseEntity.badRequest().body(Collections.singletonMap("tagNames", e.getMessage()));
         } catch (TooManyImagesException | ImageUploadException e) {
+            log.warn("Too many images in input");
             return ResponseEntity.badRequest().body(Collections.singletonMap("images", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Неизвестная ошибка: " + e.getMessage()));
@@ -155,8 +159,10 @@ public class ProductController {
             productService.updateProduct(id, form, user);
             return ResponseEntity.ok().body(Collections.singletonMap("success", true));
         } catch (TooManyTagsException e) {
+            log.warn("Too many tags in input");
             return ResponseEntity.badRequest().body(Collections.singletonMap("tagNames", e.getMessage()));
         } catch (TooManyImagesException | ImageUploadException e) {
+            log.warn("Too many images in input");
             return ResponseEntity.badRequest().body(Collections.singletonMap("images", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Неизвестная ошибка: " + e.getMessage()));

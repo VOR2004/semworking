@@ -1,44 +1,70 @@
 package ru.itis.semworkapp.config;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.itis.semworkapp.handler.AjaxAuthenticationFailureHandler;
 import ru.itis.semworkapp.handler.AjaxAuthenticationSuccessHandler;
 import ru.itis.semworkapp.service.user.UserService;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
+    private final AjaxAuthenticationFailureHandler failureHandler;
+    private final AjaxAuthenticationSuccessHandler successHandler;
+    private final PasswordEncoder passwordEncoder;
 
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider,
+                          UserService userService,
+                          AjaxAuthenticationFailureHandler failureHandler,
+                          AjaxAuthenticationSuccessHandler successHandler, PasswordEncoder passwordEncoder) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
+        this.failureHandler = failureHandler;
+        this.successHandler = successHandler;
+        this.passwordEncoder = passwordEncoder;
+    }
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService, BCryptPasswordEncoder passwordEncoder) {
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
         provider.setUserDetailsService(userService);
         provider.setHideUserNotFoundExceptions(false);
         return provider;
     }
+    @Bean
+    @Order(1)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/api/**")
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/dadata/suggest").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .authenticationProvider(daoAuthenticationProvider())
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 
     @Bean
-    public SecurityFilterChain filterChain(
-            HttpSecurity http,
-            AjaxAuthenticationFailureHandler failureHandler,
-            AjaxAuthenticationSuccessHandler successHandler) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+    @Order(2)
+    public SecurityFilterChain formLoginSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -51,7 +77,10 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
-                );
+                )
+                .authenticationProvider(daoAuthenticationProvider())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+
         return http.build();
     }
 }

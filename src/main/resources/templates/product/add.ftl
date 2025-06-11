@@ -56,6 +56,7 @@
 <h2>Добавить товар</h2>
 
 <form id="product-form" autocomplete="off" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <label>Название:
         <input type="text" name="title" value="${form.title!}">
         <div id="titleError" class="error"></div>

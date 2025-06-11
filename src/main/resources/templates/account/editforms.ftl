@@ -1,5 +1,6 @@
 <#macro editform>
 <form method="post" action="/product/edit/${productId}" id="product-form" autocomplete="off" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <label>Название:
         <input type="text" name="title" value="${form.title!}">
         <div id="titleError" class="error"></div>
