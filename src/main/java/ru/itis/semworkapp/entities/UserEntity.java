@@ -35,11 +35,12 @@ public class UserEntity {
     private String password;
 
     @Column(name = "role")
-    private String role; // ROLE_USER, ROLE_ADMIN
+    private String role;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "products")
     private List<ProductEntity> products;
 
-    // +++++поле для сообщений
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserProfile profile;
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.itis.semworkapp.entities.TagEntity;
+import ru.itis.semworkapp.dto.TagDto;
 import ru.itis.semworkapp.service.tag.TagService;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class TagController {
     public List<String> searchTags(@RequestParam String query) {
         return tagService.searchTags(query)
                 .stream()
-                .map(TagEntity::getName)
+                .map(TagDto::getName)
                 .toList();
     }
 }

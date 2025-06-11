@@ -1,21 +1,30 @@
 package ru.itis.semworkapp.service.product.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.itis.semworkapp.dto.ProductDto;
 import ru.itis.semworkapp.entities.ProductEntity;
 import ru.itis.semworkapp.entities.TagEntity;
 import ru.itis.semworkapp.entities.UserEntity;
+import ru.itis.semworkapp.exceptions.ImageUploadException;
 import ru.itis.semworkapp.exceptions.ProductNotFoundException;
+import ru.itis.semworkapp.exceptions.TooManyImagesException;
+import ru.itis.semworkapp.exceptions.TooManyTagsException;
 import ru.itis.semworkapp.forms.ProductForm;
+import ru.itis.semworkapp.forms.VoteForm;
+import ru.itis.semworkapp.mappers.ProductMapper;
+import ru.itis.semworkapp.mappers.TagMapper;
 import ru.itis.semworkapp.repositories.ProductRepository;
 import ru.itis.semworkapp.service.storage.ImageStorageService;
 import ru.itis.semworkapp.service.product.ProductService;
 import ru.itis.semworkapp.service.tag.TagService;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +33,23 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final TagService tagService;
     private final ImageStorageService imageStorageService;
+    private final ProductMapper productMapper;
+    private final TagMapper tagMapper;
     @Override
-    public List<ProductEntity> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDto> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void saveProduct(ProductForm form, UserEntity user) throws IOException {
+        if (form.getTagNames() != null && form.getTagNames().size() > 3) {
+            throw new TooManyTagsException();
+        }
+        if (form.getImages() != null && form.getImages().size() > 10) {
+            throw new TooManyImagesException();
+        }
         ProductEntity product = ProductEntity.builder()
                 .title(form.getTitle())
                 .description(form.getDescription())
@@ -42,27 +61,28 @@ public class ProductServiceImpl implements ProductService {
 
         Set<TagEntity> tags = new HashSet<>();
         if (form.getTagNames() != null) {
-            if (form.getTagNames().size() > 3) {
-                throw new IllegalArgumentException("Максимум 3 тега!");
-            }
             for (String tagName : form.getTagNames()) {
-                tags.add(tagService.findOrCreateByName(tagName));
+                tags.add(tagMapper.toEntity(tagService.findOrCreateByName(tagName)));
             }
         }
 
-        if (form.getImages() != null && !form.getImages().isEmpty()) {
-            List<String> urls = imageStorageService.uploadFiles(form.getImages());
-            product.setImageUrls(urls);
+        try {
+            if (form.getImages() != null && !form.getImages().isEmpty()) {
+                List<String> urls = imageStorageService.uploadFiles(form.getImages());
+                product.setImageUrls(urls);
 
-            String mainImageUrl = null;
-            if (form.getMainImageIndex() != null
-                    && form.getMainImageIndex() >= 0
-                    && form.getMainImageIndex() < urls.size()) {
-                mainImageUrl = urls.get(form.getMainImageIndex());
-            } else if (!urls.isEmpty()) {
-                mainImageUrl = urls.get(0);
+                String mainImageUrl = null;
+                if (form.getMainImageIndex() != null
+                        && form.getMainImageIndex() >= 0
+                        && form.getMainImageIndex() < urls.size()) {
+                    mainImageUrl = urls.get(form.getMainImageIndex());
+                } else if (!urls.isEmpty()) {
+                    mainImageUrl = urls.get(0);
+                }
+                product.setMainImageUrl(mainImageUrl);
             }
-            product.setMainImageUrl(mainImageUrl);
+        } catch (IOException ex) {
+            throw new ImageUploadException("Ошибка загрузки изображений");
         }
 
         product.setTags(tags);
@@ -114,15 +134,13 @@ public class ProductServiceImpl implements ProductService {
                 throw new IllegalArgumentException("Максимум 3 тега!");
             }
             for (String tagName : form.getTagNames()) {
-                tags.add(tagService.findOrCreateByName(tagName));
+                tags.add(tagMapper.toEntity(tagService.findOrCreateByName(tagName)));
             }
         }
         product.setTags(tags);
 
-        // Получаем список изображений, которые пользователь хочет сохранить
         List<String> savedImages = form.getExistingImageUrls() != null ? form.getExistingImageUrls() : new ArrayList<>();
 
-        // Загружаем новые изображения и добавляем их URL
         if (form.getImages() != null && !form.getImages().isEmpty() && !form.getImages().get(0).isEmpty()) {
             List<String> newUrls = imageStorageService.uploadFiles(form.getImages());
             savedImages.addAll(newUrls);
@@ -130,7 +148,6 @@ public class ProductServiceImpl implements ProductService {
 
         product.setImageUrls(savedImages);
 
-        // Обновляем главное изображение
         String mainImageUrl = null;
         if (form.getMainImageIndex() != null
                 && form.getMainImageIndex() >= 0
@@ -153,6 +170,19 @@ public class ProductServiceImpl implements ProductService {
         return product.getMainImageUrl();
     }
 
+    @Override
+    public void voteProduct(VoteForm voteForm) {
+        ProductEntity product = productRepository.findById(voteForm.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        if (product.getVotedUserIds().contains(voteForm.getUserId())) {
+            throw new IllegalStateException("User already voted for this product");
+        }
+
+        product.setRating(product.getRating() + voteForm.getVoteValue());
+        product.getVotedUserIds().add(voteForm.getUserId());
+        productRepository.save(product);
+    }
 
     @Override
     public void update(ProductEntity product) {
@@ -165,8 +195,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductEntity> getByUser(UserEntity user) {
-        return productRepository.findAllByUserEntity(user);
+    public List<ProductDto> getByUser(UserEntity user) {
+        return productRepository.findAllByUserEntity(user).stream().map(productMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -174,14 +205,20 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.getProductById(id)
                 .orElseThrow(ProductNotFoundException::new);
     }
+
     @Override
-    public Page<ProductEntity> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public ProductDto getProductById(UUID id) {
+        return productMapper.toDto(requireProductById(id));
+    }
+    @Override
+    public Page<ProductDto> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).map(productMapper::toDto);
     }
 
     @Override
-    public Page<ProductEntity> searchProducts(String query, List<String> tags, Pageable pageable) {
-        return productRepository.searchByTitleDescriptionOrTags(query, tags, pageable);
+    public Page<ProductDto> searchProducts(String query, List<String> tags, Pageable pageable) {
+        return productRepository.searchByTitleDescriptionOrTags(query, tags, pageable)
+                .map(productMapper::toDto);
     }
 
     @Override
@@ -190,7 +227,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductEntity> findByTag(String tagName) {
-        return productRepository.findByTagName(tagName);
+    public List<ProductDto> findByTag(String tagName) {
+        return productRepository.findByTagName(tagName).stream().map(productMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

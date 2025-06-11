@@ -26,6 +26,9 @@ public class ProductEntity {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
+        if (rating == null) {
+            rating = 0;
+        }
     }
     @Column(name = "title", nullable = false)
     private String title;
@@ -41,11 +44,18 @@ public class ProductEntity {
     private String lat;
     @Column(name = "lon")
     private String lon;
+    @Column(name = "rating", nullable = false)
+    private Integer rating = 0;
 
     @ElementCollection
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "image_url", length = 5000)
     private List<String> imageUrls = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "product_votes", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "user_id")
+    private Set<UUID> votedUserIds = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

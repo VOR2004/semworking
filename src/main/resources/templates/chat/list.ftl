@@ -2,6 +2,7 @@
 <html lang="ru">
 <head><meta charset="UTF-8"><title>Мои чаты</title></head>
 <body>
+<a href="/">Главная</a>
 <h2>Мои чаты</h2>
 
 <#list chats as c>

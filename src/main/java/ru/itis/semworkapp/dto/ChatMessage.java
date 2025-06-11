@@ -12,4 +12,5 @@ public class ChatMessage {
     private UUID senderId;
     private String senderName;
     private String content;
+    private String senderAvatar;
 }

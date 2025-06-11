@@ -20,10 +20,8 @@ import java.util.*;
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     private final ChatService chatService;
     private final UserService userService;
-
     private final Map<UUID, List<WebSocketSession>> chatSessions = new HashMap<>();
 
     @Override

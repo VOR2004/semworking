@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
+<#import "productforms.ftl" as forms/>
 <head>
+    <base href="/" />
     <meta charset="UTF-8">
     <title>Все товары</title>
     <style>
@@ -39,28 +41,7 @@
 </nav>
 <a href="/product/add">Добавить товар</a><br><br>
 
-<form method="get" action="/" id="search-form" autocomplete="off">
-    <label>
-        <input type="text" name="q" placeholder="Поиск по товарам..." value="${q!}" style="width: 250px;">
-    </label>
-
-    <div style="margin-top:10px;">
-        <label>Поиск по тегам:</label>
-        <div class="tag-search-container">
-            <label for="tag-search"></label><input type="text" id="tag-search" placeholder="Начните вводить тег..." style="width: 200px;">
-            <div id="tag-dropdown"></div>
-        </div>
-        <div id="selected-tags" style="margin:5px 0;">
-            <#if selectedTags??>
-                <#list selectedTags as tag>
-                    <span class="selected-tag" data-tag="${tag}">${tag} <span class="remove-tag" title="Убрать тег">×</span></span>
-                    <input type="hidden" name="tags" value="${tag}">
-                </#list>
-            </#if>
-        </div>
-    </div>
-    <button type="submit">Найти</button>
-</form>
+<@forms.searchform/>
 
 <#list products as p>
     <div style="margin-bottom: 15px;">
@@ -70,23 +51,24 @@
         <br>
         <strong>${p.title}</strong><br>
         ${p.description}<br>
+        Рейтинг: ${p.rating}<br>
         Цена: ${p.price} руб.<br>
         Размещено: ${p.createdAt}<br>
         Пользователь: ${p.userEntity.username}<br>
         <#if p.tags?? && (p.tags?size > 0)>
             Теги:
             <#list p.tags as tag>
-                <a href="/?tags=${tag.name}<#if q??>&q=${q}</#if>
+                <a href="/?tags=${tag}<#if q??>&q=${q}</#if>
                     <#if selectedTags??>
                         <#list selectedTags as t>
-                            <#if t != tag.name>&tags=${t}</#if>
+                            <#if t != tag>&tags=${t}</#if>
                         </#list>
                     </#if>
-                ">${tag.name}</a><#if tag_has_next>, </#if>
+                ">${tag}</a><#if tag_has_next>, </#if>
             </#list>
             <br>
         </#if>
-        <a href="/product/${p.id}">Открыть</a>
+        <a href="/products/${p.id}">Открыть</a>
     </div>
 </#list>
 
@@ -119,68 +101,7 @@
         </#list>
         </#if>
     ];
-
-    const tagSearch = document.getElementById('tag-search');
-    const tagDropdown = document.getElementById('tag-dropdown');
-    const selectedTagsDiv = document.getElementById('selected-tags');
-    const searchForm = document.getElementById('search-form');
-
-    function renderDropdown(filter = "") {
-        tagDropdown.innerHTML = "";
-        const filtered = allTags.filter(tag =>
-            tag.toLowerCase().includes(filter.toLowerCase()) && !selectedTags.includes(tag)
-        );
-        filtered.forEach(tag => {
-            const div = document.createElement('div');
-            div.className = 'tag-option';
-            div.dataset.tag = tag;
-            div.textContent = tag;
-            div.onclick = () => {
-                if (selectedTags.length < 3) {
-                    selectedTags.push(tag);
-                    renderSelectedTags();
-                    tagDropdown.style.display = "none";
-                    tagSearch.value = "";
-                } else {
-                    alert("Можно выбрать не более 3 тегов");
-                }
-            };
-            tagDropdown.appendChild(div);
-        });
-        tagDropdown.style.display = filtered.length > 0 ? "block" : "none";
-    }
-
-    function renderSelectedTags() {
-        selectedTagsDiv.innerHTML = "";
-        selectedTags.forEach(function(tag) {
-            const span = document.createElement('span');
-            span.className = "selected-tag";
-            span.dataset.tag = tag;
-            span.innerHTML = tag + ' <span class="remove-tag" title="Убрать тег">×</span>';
-            span.querySelector(".remove-tag").onclick = function() {
-                selectedTags = selectedTags.filter(t => t !== tag);
-                renderSelectedTags();
-            };
-            selectedTagsDiv.appendChild(span);
-
-            const input = document.createElement('input');
-            input.type = "hidden";
-            input.name = "tags";
-            input.value = tag;
-            selectedTagsDiv.appendChild(input);
-        });
-    }
-
-
-    tagSearch.addEventListener('focus', () => renderDropdown(tagSearch.value));
-    tagSearch.addEventListener('input', () => renderDropdown(tagSearch.value));
-    document.addEventListener('click', (e) => {
-        if (!tagSearch.contains(e.target) && !tagDropdown.contains(e.target)) {
-            tagDropdown.style.display = "none";
-        }
-    });
-    renderSelectedTags();
 </script>
-
+<script src="js/tags-search.js"></script>
 </body>
 </html>

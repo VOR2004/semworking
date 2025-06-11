@@ -3,12 +3,15 @@ package ru.itis.semworkapp.service.user.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.itis.semworkapp.entities.UserProfile;
 import ru.itis.semworkapp.exceptions.EmailAlreadyExistsException;
 import ru.itis.semworkapp.exceptions.PasswordMismatchException;
 import ru.itis.semworkapp.exceptions.UserNotFoundException;
 import ru.itis.semworkapp.forms.RegistrationForm;
+import ru.itis.semworkapp.repositories.UserProfileRepository;
 import ru.itis.semworkapp.repositories.UserRepository;
 import ru.itis.semworkapp.entities.UserEntity;
 import ru.itis.semworkapp.service.user.UserService;
@@ -22,12 +25,13 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) {
         UserEntity userEntity = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new User(
                 userEntity.getEmail(),
@@ -38,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity requireUserById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Override
@@ -49,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity requireUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Override
@@ -59,7 +63,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (userRepository.findByEmail(form.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException(form.getEmail());
+            throw new EmailAlreadyExistsException();
         }
 
         UserEntity user = UserEntity.builder()
@@ -69,7 +73,12 @@ public class UserServiceImpl implements UserService {
                 .role("ROLE_USER")
                 .build();
 
+        UserProfile profile = UserProfile.builder()
+                .user(user)
+                .build();
+
         userRepository.save(user);
+        userProfileRepository.save(profile);
     }
 
 }

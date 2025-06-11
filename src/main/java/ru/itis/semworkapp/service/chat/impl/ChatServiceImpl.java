@@ -2,11 +2,13 @@ package ru.itis.semworkapp.service.chat.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.itis.semworkapp.dto.MessageDto;
 import ru.itis.semworkapp.entities.ChatEntity;
 import ru.itis.semworkapp.entities.MessageEntity;
 import ru.itis.semworkapp.entities.UserEntity;
 import ru.itis.semworkapp.exceptions.ChatAccessDeniedException;
 import ru.itis.semworkapp.exceptions.ChatNotFoundException;
+import ru.itis.semworkapp.mappers.MessageMapper;
 import ru.itis.semworkapp.repositories.ChatRepository;
 import ru.itis.semworkapp.repositories.MessageRepository;
 import ru.itis.semworkapp.service.chat.ChatService;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
     private final MessageRepository messageRepository;
+    private final MessageMapper messageMapper;
 
     @Override
     public ChatEntity getOrCreateChat(UserEntity seller, UserEntity buyer) {
@@ -31,8 +34,9 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<MessageEntity> getMessages(ChatEntity chat) {
-        return messageRepository.findByChatOrderBySentAtAsc(chat);
+    public List<MessageDto> getMessages(ChatEntity chat) {
+        return messageRepository.findByChatOrderBySentAtAsc(chat)
+                .stream().map(messageMapper::toDto).toList();
     }
 
     @Override

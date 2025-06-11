@@ -43,10 +43,15 @@ public class ChatController {
         UserEntity user = userService.requireUserByEmail(userDetails.getUsername());
         ChatEntity chat = chatService.getChatIfUserHasAccess(chatId, user);
 
+        String sellerAvatar = chat.getSeller().getProfile().getAvatarUrl();
+        String buyerAvatar = chat.getBuyer().getProfile().getAvatarUrl();
+
         model.addAttribute("chat", chat);
         model.addAttribute("messages", chatService.getMessages(chat));
         model.addAttribute("messageForm", new MessageForm());
         model.addAttribute("currentUser", user);
+        model.addAttribute("sellerAvatar", sellerAvatar);
+        model.addAttribute("buyerAvatar", buyerAvatar);
 
         return "chat/view";
     }

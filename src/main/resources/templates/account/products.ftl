@@ -5,13 +5,14 @@
     <title>Мои товары</title>
 </head>
 <body>
+<a href="/">Главная</a>
 <h2>Мои товары</h2>
 <#list products as p>
     <div>
         <strong>${p.title}</strong><br>
         ${p.description}<br>
         ${p.price} руб.<br>
-        <a href="/product/${p.id}">Открыть</a> |
+        <a href="/products/${p.id}">Открыть</a> |
         <a href="/product/edit/${p.id}">Редактировать</a>
         <p>
             <#if p.imageUrls?? && (p.imageUrls?size > 0)>
@@ -28,5 +29,31 @@
         </form>
     </div>
 </#list>
+<h2>Мои данные</h2>
+
+<#if userProfile.avatarUrl?? && (userProfile.avatarUrl?length > 0)>
+    <img src="${userProfile.avatarUrl}" alt="Аватар пользователя" style="max-width:150px; margin-bottom:10px;">
+</#if>
+
+<form method="post" action="/account/update/avatar" enctype="multipart/form-data">
+    <label>Аватар:
+        <input type="file" name="avatarFile" accept="image/*" required>
+    </label>
+    <button type="submit">Загрузить и сохранить</button>
+</form>
+
+<form method="post" action="/account/update/phoneNumber">
+    <label>Телефон:
+        <input type="text" name="phoneNumber" value="${userProfile.phoneNumber!}">
+    </label>
+    <button type="submit">Сохранить</button>
+</form>
+
+<form method="post" action="/account/update/bio">
+    <label>О себе:
+        <textarea name="bio">${userProfile.bio!}</textarea>
+    </label>
+    <button type="submit">Сохранить</button>
+</form>
 </body>
 </html>

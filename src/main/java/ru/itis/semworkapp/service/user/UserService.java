@@ -9,10 +9,7 @@ import java.util.UUID;
 
 public interface UserService extends UserDetailsService {
     Optional<UserEntity> getUserByEmail(String email);
-
     UserEntity requireUserByEmail(String email);
-
     void registerUser(RegistrationForm form);
-
     UserEntity requireUserById(UUID id);
 }
