@@ -10,12 +10,13 @@ import ru.itis.semworkapp.dto.ProductDto;
 import ru.itis.semworkapp.entities.ProductEntity;
 import ru.itis.semworkapp.entities.TagEntity;
 import ru.itis.semworkapp.entities.UserEntity;
-import ru.itis.semworkapp.exceptions.ImageUploadException;
-import ru.itis.semworkapp.exceptions.ProductNotFoundException;
-import ru.itis.semworkapp.exceptions.TooManyImagesException;
-import ru.itis.semworkapp.exceptions.TooManyTagsException;
+import ru.itis.semworkapp.exceptions.product.ImageUploadException;
+import ru.itis.semworkapp.exceptions.product.ProductNotFoundException;
+import ru.itis.semworkapp.exceptions.product.TooManyImagesException;
+import ru.itis.semworkapp.exceptions.product.TooManyTagsException;
 import ru.itis.semworkapp.forms.ProductForm;
 import ru.itis.semworkapp.forms.VoteForm;
+import ru.itis.semworkapp.mappers.ProductFormMapper;
 import ru.itis.semworkapp.mappers.ProductMapper;
 import ru.itis.semworkapp.mappers.TagMapper;
 import ru.itis.semworkapp.repositories.product.ProductRepository;
@@ -35,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
     private final ImageStorageService imageStorageService;
     private final ProductMapper productMapper;
     private final TagMapper tagMapper;
+    private final ProductFormMapper productFormMapper;
     @Override
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
@@ -50,14 +52,7 @@ public class ProductServiceImpl implements ProductService {
         if (form.getImages() != null && form.getImages().size() > 10) {
             throw new TooManyImagesException();
         }
-        ProductEntity product = ProductEntity.builder()
-                .title(form.getTitle())
-                .description(form.getDescription())
-                .price(form.getPrice())
-                .userEntity(user)
-                .lon(form.getLon())
-                .lat(form.getLat())
-                .build();
+        ProductEntity product = productFormMapper.toEntity(form, user);
 
         Set<TagEntity> tags = new HashSet<>();
         if (form.getTagNames() != null) {
@@ -95,14 +90,7 @@ public class ProductServiceImpl implements ProductService {
         if (!userOwnsProduct(user, product)) {
             throw new SecurityException("Нет доступа к этому товару");
         }
-        ProductForm form = new ProductForm();
-        form.setTitle(product.getTitle());
-        form.setDescription(product.getDescription());
-        form.setPrice(product.getPrice());
-        form.setLat(product.getLat());
-        form.setLon(product.getLon());
-        form.setTagNames(product.getTags().stream().map(TagEntity::getName).toList());
-        return form;
+        return productFormMapper.toForm(product);
     }
 
     @Override

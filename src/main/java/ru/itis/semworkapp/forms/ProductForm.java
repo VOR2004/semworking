@@ -1,5 +1,6 @@
 package ru.itis.semworkapp.forms;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@Schema(description = "Форма для добавления товара")
 public class ProductForm {
     @NotBlank(message = "Название обязательно")
     @Size(max = 100, message = "Название не должно превышать 100 символов")

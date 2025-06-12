@@ -70,6 +70,7 @@
 <div id="map"></div>
 
 <form method="post" action="/chat/start/${product.userEntity.id}">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <button type="submit">Написать продавцу</button>
 </form>
 <script>

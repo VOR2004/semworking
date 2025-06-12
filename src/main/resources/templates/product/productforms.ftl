@@ -1,6 +1,5 @@
 <#macro searchform>
     <form method="get" action="/" id="search-form" autocomplete="off">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <div class="search-row">
             <label>
                 <input type="text" name="q" placeholder="Поиск по товарам..." value="${q!}" class="search-input">
