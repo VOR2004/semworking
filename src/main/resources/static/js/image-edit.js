@@ -191,7 +191,7 @@ form.addEventListener('submit', function(e) {
         if (response.redirected) {
             window.location.href = response.url;
         }
-    }).catch(() => alert('Ошибка сети'));
+    }).catch()
 });
 
 updateMainImageVisual();

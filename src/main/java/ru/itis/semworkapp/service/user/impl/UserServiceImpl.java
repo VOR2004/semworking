@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 import ru.itis.semworkapp.entities.UserProfile;
 import ru.itis.semworkapp.exceptions.EmailAlreadyExistsException;
 import ru.itis.semworkapp.exceptions.PasswordMismatchException;
-import ru.itis.semworkapp.exceptions.UserNotFoundException;
 import ru.itis.semworkapp.forms.RegistrationForm;
-import ru.itis.semworkapp.repositories.UserProfileRepository;
-import ru.itis.semworkapp.repositories.UserRepository;
+import ru.itis.semworkapp.repositories.user.UserProfileRepository;
+import ru.itis.semworkapp.repositories.user.UserRepository;
 import ru.itis.semworkapp.entities.UserEntity;
 import ru.itis.semworkapp.service.user.UserService;
 

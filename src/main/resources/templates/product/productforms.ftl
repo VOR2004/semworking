@@ -1,29 +1,26 @@
 <#macro searchform>
     <form method="get" action="/" id="search-form" autocomplete="off">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        <label>
-            <input type="text" name="q" placeholder="Поиск по товарам..." value="${q!}" style="width: 250px;">
-        </label>
-
-        <div style="margin-top:10px;">
-            <label>Поиск по тегам:</label>
+        <div class="search-row">
+            <label>
+                <input type="text" name="q" placeholder="Поиск по товарам..." value="${q!}" class="search-input">
+            </label>
             <div class="tag-search-container">
-                <label for="tag-search"></label><input type="text" id="tag-search" placeholder="Начните вводить тег..." style="width: 200px;">
+                <label for="tag-search"></label><input type="text" id="tag-search" placeholder="Теги..." class="search-input">
                 <div id="tag-dropdown"></div>
             </div>
-            <div id="selected-tags" style="margin:5px 0;">
-                <#if selectedTags??>
-                    <#list selectedTags as tag>
-                        <span class="selected-tag" data-tag="${tag}">${tag} <span class="remove-tag" title="Убрать тег">×</span></span>
-                        <input type="hidden" name="tags" value="${tag}">
-                    </#list>
-                </#if>
-            </div>
+            <button type="submit" class="search-btn">Найти</button>
         </div>
-        <button type="submit">Найти</button>
+        <div id="selected-tags">
+            <#if selectedTags??>
+                <#list selectedTags as tag>
+                    <span class="selected-tag" data-tag="${tag}">${tag} <span class="remove-tag" title="Убрать тег">×</span></span>
+                    <input type="hidden" name="tags" value="${tag}">
+                </#list>
+            </#if>
+        </div>
     </form>
 </#macro>
-
 
 <#macro productform>
     <form id="product-form" autocomplete="off" enctype="multipart/form-data" novalidate>

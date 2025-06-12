@@ -1,4 +1,4 @@
-package ru.itis.semworkapp.repositories;
+package ru.itis.semworkapp.repositories.product.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.itis.semworkapp.entities.ProductEntity;
 import ru.itis.semworkapp.entities.TagEntity;
+import ru.itis.semworkapp.repositories.product.ProductRepositoryCustom;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,66 +4,44 @@
     <base href="/" />
     <meta charset="UTF-8">
     <title>${product.title}</title>
+    <link rel="stylesheet" href="css/product-view.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Coral+Pixels&family=DotGothic16&family=Doto:wght,ROND@100..900,100&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Micro+5&family=Orbitron:wght@400..900&family=Press+Start+2P&family=Rampart+One&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-    <style>
-        #map {
-            width: 100%;
-            height: 400px;
-            margin: 10px 0;
-        }
-        #reset-center {
-            margin-bottom: 10px;
-        }
-        .rating-container {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-        }
-        .rating-value {
-            margin: 0 10px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .vote-btn {
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .vote-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-    </style>
 </head>
 <body>
 <a href="/">Главная</a>
-<#if product.mainImageUrl?? && (product.mainImageUrl?length > 0)>
-    <img src="${product.mainImageUrl}" alt="Главное фото" style="max-width:120px;max-height:120px;margin:5px 0;">
-</#if>
+<div class="main-image-container">
+    <#if product.mainImageUrl?? && (product.mainImageUrl?length > 0)>
+        <img src="${product.mainImageUrl}" alt="Главное фото">
+    </#if>
+</div>
 <h2>${product.title}</h2>
 <p>${product.description}</p>
 <p>Рейтинг: ${product.rating}</p>
-<p>Цена: ${product.price} руб.</p>
-<p>Продавец: ${product.userEntity.username}</p>
+<div class="price-rating-container">
+    <p class="price">Цена: ${product.price} руб.</p>
 
-<div class="rating-container">
-    <form method="post" action="/products/vote">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        <input type="hidden" name="productId" value="${product.id}">
-        <input type="hidden" name="voteValue" value="-1">
-        <button type="submit" class="vote-btn"
-                <#if userVoted?? && userVoted>disabled</#if>>-</button>
-    </form>
+    <div class="rating-container">
+        <form method="post" action="/products/vote">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            <input type="hidden" name="productId" value="${product.id}">
+            <input type="hidden" name="voteValue" value="-1">
+            <button type="submit" class="vote-btn" <#if userVoted?? && userVoted>disabled</#if>>-</button>
+        </form>
 
-    <span class="rating-value">${product.rating}</span>
+        <span class="rating-value">${product.rating}</span>
 
-    <form method="post" action="/products/vote">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        <input type="hidden" name="productId" value="${product.id}">
-        <input type="hidden" name="voteValue" value="1">
-        <button type="submit" class="vote-btn"
-                <#if userVoted?? && userVoted>disabled</#if>>+</button>
-    </form>
+        <form method="post" action="/products/vote">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            <input type="hidden" name="productId" value="${product.id}">
+            <input type="hidden" name="voteValue" value="1">
+            <button type="submit" class="vote-btn" <#if userVoted?? && userVoted>disabled</#if>>+</button>
+        </form>
+    </div>
 </div>
+<p>Продавец: ${product.userEntity.username}</p>
 
 <p>
     Теги:
@@ -85,16 +63,15 @@
         <span>Нет изображений</span>
     </#if>
 </p>
+<br><br>
 
 <button id="reset-center">Вернуться к месту товара</button>
+<br><br>
 <div id="map"></div>
 
 <form method="post" action="/chat/start/${product.userEntity.id}">
     <button type="submit">Написать продавцу</button>
 </form>
-
-<a href="/">Назад</a>
-
 <script>
     window.productCoords = [${product.lat!0}, ${product.lon!0}];
     window.productTitle = "${product.title?js_string}";

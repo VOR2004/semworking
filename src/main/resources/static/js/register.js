@@ -1,8 +1,7 @@
-
+const csrfToken = document.querySelector('input[name="_csrf"]').value;
 document.getElementById('registrationForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    // Сброс сообщений об ошибках
     document.querySelectorAll('.error').forEach(el => el.textContent = '');
     document.getElementById('errorMessage').style.display = 'none';
 
@@ -16,7 +15,8 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: JSON.stringify(jsonData)
     })
@@ -25,23 +25,20 @@ document.getElementById('registrationForm').addEventListener('submit', function(
                 return response.json();
             } else {
                 return response.json().then(data => {
-                    throw data; // Пробрасываем ошибки дальше
+                    throw data;
                 });
             }
         })
         .then(data => {
             if (data.success) {
-                // Успешная регистрация - перенаправляем на страницу входа
                 window.location.href = '/login';
             } else {
-                // Обработка других ошибок (например, с бэкенда)
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('errorMessage').textContent = data.error || 'Ошибка регистрации';
             }
         })
         .catch(error => {
             if (typeof error === 'object') {
-                // Вывод ошибок валидации
                 for (let field in error) {
                     const errorElement = document.getElementById(field + 'Error');
                     if (errorElement) {
@@ -49,7 +46,6 @@ document.getElementById('registrationForm').addEventListener('submit', function(
                     }
                 }
             } else {
-                // Общая ошибка
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('errorMessage').textContent = error || 'Ошибка регистрации';
             }

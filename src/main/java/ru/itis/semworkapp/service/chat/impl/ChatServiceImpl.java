@@ -9,8 +9,8 @@ import ru.itis.semworkapp.entities.UserEntity;
 import ru.itis.semworkapp.exceptions.ChatAccessDeniedException;
 import ru.itis.semworkapp.exceptions.ChatNotFoundException;
 import ru.itis.semworkapp.mappers.MessageMapper;
-import ru.itis.semworkapp.repositories.ChatRepository;
-import ru.itis.semworkapp.repositories.MessageRepository;
+import ru.itis.semworkapp.repositories.chat.ChatRepository;
+import ru.itis.semworkapp.repositories.chat.MessageRepository;
 import ru.itis.semworkapp.service.chat.ChatService;
 
 import java.time.LocalDateTime;

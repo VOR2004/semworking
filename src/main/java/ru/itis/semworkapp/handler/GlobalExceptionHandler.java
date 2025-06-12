@@ -19,6 +19,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ChatAccessDeniedException.class)
     public String handleAccessDenied(ChatAccessDeniedException ex, Model model) {
         model.addAttribute("error", ex.getMessage());
-        return "error/403";
+        return "error/403.ftl";
     }
 }

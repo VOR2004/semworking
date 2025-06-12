@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.itis.semworkapp.dto.TagDto;
 import ru.itis.semworkapp.entities.TagEntity;
 import ru.itis.semworkapp.mappers.TagMapper;
-import ru.itis.semworkapp.repositories.TagRepository;
+import ru.itis.semworkapp.repositories.tag.TagRepository;
 import ru.itis.semworkapp.service.tag.TagService;
 
 import java.util.List;

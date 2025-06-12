@@ -37,10 +37,33 @@ socket.onmessage = function(event) {
 
     avatarImg.src = getAvatarUrl(msg.senderId, msg.avatarUrl);
 
-    const el = document.createElement("div");
-    el.textContent = msg.senderName + ": " + msg.content;
+    const textDiv = document.createElement("div");
+    textDiv.style.display = "flex";
+    textDiv.style.flexDirection = "column";
+
+    const contentDiv = document.createElement("div");
+    contentDiv.textContent = msg.senderName + ": " + msg.content;
+
+    const timeDiv = document.createElement("small");
+    timeDiv.style.color = "#888";
+    timeDiv.style.fontSize = "12px";
+    timeDiv.style.marginTop = "2px";
+
+    if (msg.sentAt) {
+        const date = new Date(msg.sentAt);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        timeDiv.textContent = hours + ":" + minutes;
+    } else {
+        timeDiv.textContent = "";
+    }
+
+    textDiv.appendChild(contentDiv);
+    textDiv.appendChild(timeDiv);
+
     messageDiv.appendChild(avatarImg);
-    messageDiv.appendChild(el);
+    messageDiv.appendChild(textDiv);
+
     document.getElementById("messages").appendChild(messageDiv);
 };
 

@@ -3,6 +3,7 @@ package ru.itis.semworkapp.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -14,4 +15,5 @@ public class ChatMessage {
     private String content;
     private String senderAvatar;
     private String avatarUrl;
+    private String sentAt;
 }

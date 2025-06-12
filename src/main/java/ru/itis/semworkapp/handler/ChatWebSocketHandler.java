@@ -13,6 +13,7 @@ import ru.itis.semworkapp.exceptions.ChatInvalidIdException;
 import ru.itis.semworkapp.service.chat.ChatService;
 import ru.itis.semworkapp.service.user.UserService;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -46,6 +47,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             avatarUrl = chat.getBuyer().getProfile() != null ? chat.getBuyer().getProfile().getAvatarUrl() : null;
         }
         msg.setAvatarUrl(avatarUrl != null ? avatarUrl : "/images/avatar-placeholder.png");
+        msg.setSentAt(LocalDateTime.now().toString());
 
         List<WebSocketSession> sessions = chatSessions.getOrDefault(msg.getChatId(), Collections.emptyList());
         for (WebSocketSession s : sessions) {

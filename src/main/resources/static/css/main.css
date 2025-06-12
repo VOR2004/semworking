@@ -1,0 +1,221 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    color: #333;
+}
+
+.navbar {
+    width: 100vw;
+    background: #a8a8a8;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 30px;
+    height: 56px;
+    box-sizing: border-box;
+}
+
+.navbar a, .add-product-btn {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    background: none;
+    border: none;
+    margin-right: 24px;
+    font-size: 16px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.navbar a:hover, .add-product-btn:hover {
+    background: #005fa3;
+}
+
+.add-product-btn {
+    background: #4a4f54;
+    color: #fff;
+    margin-left: auto;
+    font-weight: 700;
+}
+
+.add-product-btn:hover {
+    background: #9099cc;
+}
+
+#search-form {
+    max-width: 1200px;
+    margin: 30px auto 30px auto;
+    background: #fff;
+    padding: 18px 24px 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-input {
+    height: 32px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0 12px;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.tag-search-container {
+    flex: 1 1 0;
+    position: relative;
+}
+
+#tag-dropdown {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    max-height: 120px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.search-btn {
+    background: #90e6f3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    height: 32px;
+    padding: 0 18px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-btn:hover {
+    background: #487da4;
+}
+
+#products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    padding: 0 24px 24px 24px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 18px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 320px;
+}
+
+.product-card img {
+    max-width: 120px;
+    max-height: 120px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.product-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: center;
+    min-height: 40px;
+}
+
+.product-rating, .product-price {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.product-tags {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+}
+
+.navbar a {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+.product-title,
+.product-rating,
+.product-price {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+.product-rating,
+.product-price {
+    font-family: "Silkscreen", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.product-title {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+.add-product-btn {
+    font-family: "DotGothic16", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+.tag-search-container { position: relative; display: inline-block; }
+#tag-dropdown {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    max-height: 120px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 200px;
+}
+.selected-tag {
+    display: inline-block;
+    background: #e0e0e0;
+    border-radius: 12px;
+    padding: 2px 8px;
+    margin: 2px 4px 2px 0;
+    font-size: 14px;
+}
+.remove-tag {
+    color: #b00;
+    margin-left: 6px;
+    cursor: pointer;
+}

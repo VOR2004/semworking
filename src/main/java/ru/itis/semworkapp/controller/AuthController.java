@@ -12,7 +12,6 @@ import ru.itis.semworkapp.exceptions.EmailAlreadyExistsException;
 import ru.itis.semworkapp.exceptions.PasswordMismatchException;
 import ru.itis.semworkapp.forms.RegistrationForm;
 import ru.itis.semworkapp.service.user.UserService;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,8 +56,6 @@ public class AuthController {
             return ResponseEntity.badRequest().body(errors);
         }
     }
-
-
 
     @GetMapping("/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error,

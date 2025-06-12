@@ -1,4 +1,4 @@
-package ru.itis.semworkapp.repositories;
+package ru.itis.semworkapp.repositories.product;
 
 import lombok.NonNull;
 import org.springframework.data.domain.Page;

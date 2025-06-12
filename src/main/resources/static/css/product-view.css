@@ -1,0 +1,197 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+    margin: 20px;
+    line-height: 1.5;
+}
+
+a[href="/"] {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-family: "Press Start 2P", system-ui;
+    font-style: normal;
+    font-size: 16px;
+    color: #727272;
+    padding: 12px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.25s ease;
+    user-select: none;
+}
+
+a[href="/"]:hover {
+    color: #565e69;
+    text-decoration: underline;
+}
+
+h2 {
+    text-align: center;
+    margin: 20px 0 30px;
+    color: #222;
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+img[alt="Главное фото"],
+img[alt="Фото товара"] {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+
+p {
+    font-weight: 600;
+    font-family: "Press Start 2P", system-ui;
+    font-style: normal;
+    max-width: 720px;
+    margin: 0 auto 12px auto;
+    font-size: 16px;
+    color: #444;
+}
+
+.rating-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.rating-value {
+    font-size: 30px;
+    font-weight: 600;
+    font-family: "Press Start 2P", system-ui;
+    font-style: normal;
+    color: #222;
+    min-width: 40px;
+    text-align: center;
+}
+
+.vote-btn {
+    background-color: #4a4f54;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "DotGothic16", sans-serif;
+    transition: background-color 0.3s ease;
+    user-select: none;
+}
+
+.vote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vote-btn:hover:not(:disabled) {
+    background-color: #9099cc;
+}
+
+#reset-center {
+    display: block;
+    margin: 20px auto 10px auto;
+    padding: 10px 20px;
+    background-color: #727272;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    transition: background-color 0.25s ease;
+    user-select: none;
+}
+
+#reset-center:hover {
+    background-color: #565e69;
+}
+
+#map {
+    width: 100%;
+    max-width: 720px;
+    height: 400px;
+    margin: 0 auto 30px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+form button[type="submit"] {
+    background-color: #4a4f54;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "DotGothic16", sans-serif;
+    transition: background-color 0.25s ease;
+    user-select: none;
+    display: block;
+    margin: 0 auto 20px auto;
+}
+
+form button[type="submit"]:hover {
+    background-color: #9099cc;
+}
+
+p a {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.main-image-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+img[alt="Главное фото"] {
+    width: 90vw;
+    max-width: 800px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    object-fit: cover;
+    display: block;
+}
+
+#map {
+    width: 100%;
+    max-width: 720px;
+    height: 400px;
+    margin: 20px auto 40px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: block;
+}
+
+.price-rating-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 720px;
+    margin: 0 auto 20px auto;
+    gap: 20px;
+}
+
+.price-rating-container .price {
+    font-size: 16px;
+    color: #444;
+    margin: 0;
+    white-space: nowrap;
+}

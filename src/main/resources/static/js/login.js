@@ -1,3 +1,4 @@
+const csrfToken = document.querySelector('input[name="_csrf"]').value;
 document.getElementById('ajaxLoginForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -11,7 +12,8 @@ document.getElementById('ajaxLoginForm').addEventListener('submit', function(eve
         body: new URLSearchParams(formData),
         headers: {
             'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': csrfToken
         }
     }).then(response => {
         if (response.ok) {

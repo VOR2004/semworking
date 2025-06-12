@@ -1,4 +1,4 @@
-package ru.itis.semworkapp.repositories;
+package ru.itis.semworkapp.repositories.product;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

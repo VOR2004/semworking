@@ -1,4 +1,4 @@
-package ru.itis.semworkapp.repositories;
+package ru.itis.semworkapp.repositories.chat;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.itis.semworkapp.entities.ChatEntity;

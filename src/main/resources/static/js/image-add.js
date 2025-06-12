@@ -31,8 +31,6 @@ function renderPreviews() {
             console.error("Ошибка при чтении файла:", file.name, error);
         };
         reader.readAsDataURL(file);
-
-        // Кнопка "Сделать главной"
         const mainBtn = document.createElement('button');
         mainBtn.type = 'button';
         mainBtn.innerHTML = '★';
@@ -56,7 +54,6 @@ function renderPreviews() {
             renderPreviews();
         });
 
-        // Кнопка "Удалить"
         const removeBtn = document.createElement('button');
         removeBtn.type = 'button';
         removeBtn.textContent = '×';
@@ -104,33 +101,4 @@ imageInput.addEventListener('change', function() {
     });
     renderPreviews();
     this.value = '';
-});
-
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    console.log("Отправка формы...");
-
-    const formData = new FormData(form);
-    formData.delete('images');
-    selectedFiles.forEach(file => formData.append('images', file));
-    formData.set('mainImageIndex', mainImageIndex);
-
-    console.log("Данные формы перед отправкой:", [...formData.entries()]);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => {
-            console.log("Ответ сервера:", response);
-            if (response.redirected) {
-                console.log("Перенаправление на:", response.url);
-                window.location.href = response.url;
-            } else {
-                console.warn("Обработка ошибок отсутствует или произошла ошибка");
-            }
-        })
-        .catch(error => {
-            console.error("Ошибка при отправке формы:", error);
-        });
 });

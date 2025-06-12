@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itis.semworkapp.entities.UserProfile;
-import ru.itis.semworkapp.repositories.UserProfileRepository;
+import ru.itis.semworkapp.repositories.user.UserProfileRepository;
 
 import java.util.UUID;
 

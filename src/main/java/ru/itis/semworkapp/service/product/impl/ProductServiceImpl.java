@@ -18,7 +18,7 @@ import ru.itis.semworkapp.forms.ProductForm;
 import ru.itis.semworkapp.forms.VoteForm;
 import ru.itis.semworkapp.mappers.ProductMapper;
 import ru.itis.semworkapp.mappers.TagMapper;
-import ru.itis.semworkapp.repositories.ProductRepository;
+import ru.itis.semworkapp.repositories.product.ProductRepository;
 import ru.itis.semworkapp.service.storage.ImageStorageService;
 import ru.itis.semworkapp.service.product.ProductService;
 import ru.itis.semworkapp.service.tag.TagService;
