@@ -1,0 +1,35 @@
+### AuthRestController - успешная регистрация
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Qwerty123!",
+  "confirmPassword": "Qwerty123!",
+  "firstName": "Иван",
+  "lastName": "Иванов"
+}
+
+### AuthRestController - регистрация с ошибкой (пароли не совпадают)
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Qwerty123!",
+  "confirmPassword": "Qwerty123",
+  "firstName": "Иван",
+  "lastName": "Иванов"
+}
+
+### AuthRestController - регистрация с ошибкой (email уже существует)
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+  "email": "existing@example.com",
+  "password": "Qwerty123!",
+  "confirmPassword": "Qwerty123!",
+  "firstName": "Иван",
+  "lastName": "Иванов"
+}

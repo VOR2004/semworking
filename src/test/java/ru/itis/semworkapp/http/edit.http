@@ -1,0 +1,27 @@
+### ProductRestController - редактирование товара (нужен аутентифицированный пользователь)
+POST http://localhost:8080/product/edit/550e8400-e29b-41d4-a716-446655440000
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer {{auth_token}}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="name"
+
+Обновленный товар
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+Новое описание товара
+--WebAppBoundary
+Content-Disposition: form-data; name="price"
+
+1500
+--WebAppBoundary
+Content-Disposition: form-data; name="tagNames"
+
+новый_тег
+--WebAppBoundary
+Content-Disposition: form-data; name="images"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< img/test.jpg
+--WebAppBoundary--

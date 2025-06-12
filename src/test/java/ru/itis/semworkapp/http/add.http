@@ -1,0 +1,27 @@
+### ProductRestController - добавление товара (нужен аутентифицированный пользователь)
+POST http://localhost:8080/product/add
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer {{auth_token}}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="name"
+
+Тестовый товар
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+Описание тестового товара
+--WebAppBoundary
+Content-Disposition: form-data; name="price"
+
+1000
+--WebAppBoundary
+Content-Disposition: form-data; name="tagNames"
+
+тег1,тег2
+--WebAppBoundary
+Content-Disposition: form-data; name="images"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< img/test.jpg
+--WebAppBoundary--
