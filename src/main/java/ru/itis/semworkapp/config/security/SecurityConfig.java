@@ -16,6 +16,8 @@ import ru.itis.semworkapp.handler.ajax.AjaxAuthenticationFailureHandler;
 import ru.itis.semworkapp.handler.ajax.AjaxAuthenticationSuccessHandler;
 import ru.itis.semworkapp.service.user.UserService;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 public class SecurityConfig {
 
@@ -51,6 +53,7 @@ public class SecurityConfig {
         http
                 .securityMatcher("/api/**")
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/dadata/suggest").permitAll()
@@ -67,6 +70,7 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain formLoginSecurityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
