@@ -1,0 +1,30 @@
+# Gradle
+.gradle
+build
+
+# IntelliJ IDEA / Eclipse / VSCode
+.idea
+*.iml
+*.ipr
+*.iws
+.vscode
+
+# Logs
+*.log
+
+# OS stuff
+.DS_Store
+Thumbs.db
+
+# Env or config files (если не нужны)
+.env
+*.yaml
+!src/main/resources/application-*.yaml  # разрешаем нужные yaml
+
+# Git
+.git
+.gitignore
+
+# Docker artifacts
+docker-compose.yml
+Dockerfile
